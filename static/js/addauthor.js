@@ -34,6 +34,9 @@ function get_recommended_author_list(aid){
 function search_auther_list(aid,url){
   var recive_size;
   $("#add_all_author_table").empty();
+  //Edited
+  $.get('/remote/authors',function(data){
+
     $.getJSON(aid+url,function(data2){
       recive_size = data2.length;
       $.each(data2,function(i,field){
@@ -89,7 +92,9 @@ function search_auther_list(aid,url){
             });     
         });
   });
-  }
+//Edited
+  });
+}
 $(document).ready(function(){
   get_author_id();
   $("#search_button").click(function(event){

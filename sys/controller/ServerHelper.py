@@ -96,3 +96,25 @@ class ServerHelper:
           if(len(re) != 0):
             return re[0]
         return None
+
+    def getSidByUrl(self,url):
+         cur = self.dbAdapter.getcursor()
+         query = "SELECT sid FROM servers WHERE url='%s'"%(url)
+         try:
+           cur.execute(query)
+         except Exception, e:
+           print("****************************************")
+           print("SQLException from getSidByUrl():")
+           print("Error code:", err.errno)
+           print("SQLSTATE value:", err.sqlstate)
+           print("Error message:", err.msg)
+           print("Query:",query)
+           print("****************************************")
+           return None
+ 
+         re = cur.fetchone()
+         
+         if (re != None):
+           if(len(re) != 0):
+             return re[0]
+         return None

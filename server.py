@@ -1043,7 +1043,15 @@ def uploadPostPermissionToServer(authorName,pid):
         return json.dumps({'status':result}),200
     else:
         return abort(404)
-
+        
+@app.route('/remote/authors',methods=["GET"])
+def getGlobalAuthorsFromRemoteServer():
+ 
+    url = "http://cs410-06/global/authors"
+    response = requests.get(url)
+    sid = serverController.getSidByUrl()
+    result = serviceController.getGlobalAuthorsFromRemoteServer(response.content,sid)
+    return make_response("", 200)
 
 def getPublicPostsFromRemoteServer():
     url = "http://cs410-06/posts"
