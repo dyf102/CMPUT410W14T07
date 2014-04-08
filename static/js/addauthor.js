@@ -105,8 +105,10 @@ function search_link(){
   search_click();
 }
 function page_click(){
-  $('body').on('click','#page_item',function(){
-    event.preventDefault();
+  $('body').on('click','#page_item',function(event){
+    if (event!=undefined) {
+      event.preventDefault();
+    }
     var pos = parseInt($(this).attr("data"));
     add_author_hide_all_row()
     for (var i = (pos-1)*item_per_page; i <(pos)*item_per_page; i++) {
@@ -166,7 +168,7 @@ function get_author_name(){
 function addpaginate(size){
   var page_number = Math.ceil(size/3);
   for (var i = page_number; i >0; i--) {
-    $("#page_num_begin").after("<li><a href=\"javascritp:void(0);\" id='page_item' data='"+i
+    $("#page_num_begin").after("<li><a id='page_item' data='"+i
       +"' >"+(i)+"</a></li>");
   }
 }
