@@ -1049,7 +1049,10 @@ def getGlobalAuthorsFromRemoteServer():
  
     url = "http://cs410-06/global/authors"
     response = requests.get(url)
-    sid = serverController.getSidByUrl()
+    sid = serverController.getSidByUrl(url)
+    if(sid == None):
+        serverController.addServer(url,url,0)
+        sid = serverController.getSidByUrl(url)
     result = serviceController.getGlobalAuthorsFromRemoteServer(response.content,sid)
     return make_response("", 200)
 

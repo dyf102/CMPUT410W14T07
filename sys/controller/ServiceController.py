@@ -136,10 +136,10 @@ class ServiceController:
         else:
             return []
 
-    def getGlobalAuthorsFromRemoteServer(self,response):
+    def getGlobalAuthorsFromRemoteServer(self,response,serverId):
         authors = json.loads(response)
         for author in authors:
-            self.authorController.addAuthor(author['id'],author['id'],'',author['displayname'],serverId)
+            self.authorController.addRemoteAuthor(author['id'],author['displayname'],serverId)
 
 
     def getPublicPostsFromRemoteServer(self,response):
