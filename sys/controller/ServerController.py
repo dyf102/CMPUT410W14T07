@@ -21,3 +21,7 @@ class ServerController:
     def getServerUrlBySid(self,sid):
 
         return self.serverHelper.getServerUrlBySid(sid)
+
+    def getSidByUrl(self,url):
+
+        return self.serverHelper.getSidByUrl(url)
