@@ -92,8 +92,8 @@ function search_auther_list(aid,url){
   }
 $(document).ready(function(){
   get_author_id();
-  $("#search_button").click(function(){
-    search_click();
+  $("#search_button").click(function(event){
+    search_click(event);
   });
   page_click();
 });
@@ -116,8 +116,10 @@ function add_author_hide_all_row(){
     $("#search_row_count"+i).hide();
     }
 }
-function search_click(){
-  event.preventDefault();
+function search_click(event){
+  if(event !=undefined){
+    event.preventDefault();
+}
   raw_input = $("#search_input").val();
   if (raw_input.length>50) {
       $("#search_form").removeClass("form-group");
