@@ -32,10 +32,10 @@ class ServerHelper:
 
 
     def addServer(self,name,url,local):
-
+        host = url.split('/')[2]
         cur = self.dbAdapter.getcursor()
         sid =Utility.getid()
-        query = ("INSERT INTO servers VALUES('%s','%s','%s',%s)")%(sid,name,url,local)
+        query = ("INSERT INTO servers VALUES('%s','%s','%s',%s)")%(sid,name,host,local)
         try:
             cur.execute(query)
         except mysql.connector.Error as err:

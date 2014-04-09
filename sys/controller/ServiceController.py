@@ -91,7 +91,7 @@ class ServiceController:
             else:
                 return False
         return None
-
+    
     def sendFriendRequestToRemoteServer(self,senderAid,senderName,remoteAid,remoteUrl):
         '''send friend request to remote server'''
 
@@ -102,12 +102,41 @@ class ServiceController:
         friend['id'] = remoteAid
         friend['host'] = remoteUrl
         friend['displayname'] = ''
+        
+        author['author'] = friend
 
         request['id'] = senderAid
         request['host'] = "http://cs410.cs.ualberta.ca:41078/"
         request['displayname'] = senderName
-        request['friend'] = friend
+        request['friend'] = author
 
+        return request
+
+    def sendAcceptRequestToRemoteServer(self,senderAid,remoteAid):
+
+        request = {}
+        remoteAuthor={}
+        localAuthor={}
+        
+        request['query'] = 'friendrequest'
+        author = {} 
+        friend = {}
+        friend['id'] = remoteAid
+        friend['host'] = ""
+        friend['url'] = ""
+
+        author['id'] = senderAid
+        author['host'] = "http://cs410-07:8080/"
+        author['url'] = ""
+
+        remoteAuthor['author'] = friend
+
+        localAuthor['author'] = author 
+
+        request['friend'] = remoteAuthor
+        request['author'] = localAuthor
+    
+        print(request)
         return request
 
     def sendPublicPostsToRemoteServer(self):

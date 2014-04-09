@@ -560,7 +560,13 @@ def addfriend(aid):
         try:
             request_aid = request.args.get('recipient')
             if reController.sendRequest(aid,request_aid) is True:
-                re = make_response("OK",200)
+                
+                if aController.isRemoteAuthor(request_aid) == True:
+                    author = aController.getAuthorInfoByAid(aid)
+                    repsonse = sendAcceptRequestToRemoteServer(aid,author.getNickname(),request_aid,"")
+
+                else:
+                    re = make_response("OK",200)
                 return re
             else:
                 re = make_response("Existed",409)
@@ -593,7 +599,7 @@ def acceptRequest(recipientAid):
 
                 response = sendAcceptRequestToRemoteServer(recipientAid,recipientName,remoteSenderAid,remoteUrl)
 
-                if(response == True):
+                if(response):
                     if(reController.acceptRequestFromSender(recipientAid,senderAid)):
                         re = make_response("OK",200)
                 re = make_response("Failed")
@@ -977,13 +983,14 @@ Don't access this API from client side
 This is for internal server to use only
 '''
 #@app.route('/response/accept')
-def sendAcceptRequestToRemoteServer(recipientAid,recipientName,remoteSenderAid,remoteSid):
+def sendAcceptRequestToRemoteServer(recipientAid,recipientName,remoteSenderAid,remoteUrl):
     
-    payload = serviceController.sendFriendRequestToRemoteServer(recipientAid,recipientName,remoteSenderAid,remoteSid)
+    payload = serviceController.sendAcceptRequestToRemoteServer(recipientAid,remoteSenderAid)
     if(payload != None):
-        url = payload['friend']['host']
+        remoteUrl = 'http://'+remoteUrl+'/service/friendrequest'
         headers = {'content-type': 'application/json'}
-        response = requests.post(url,data = json.dumps(payload),headers = headers )
+        print(payload)
+        response = requests.post(remoteUrl,data = json.dumps(payload),headers = headers )
         if(response.status_code == '200'):
             return True
         else:
@@ -1047,17 +1054,18 @@ def uploadPostPermissionToServer(authorName,pid):
 @app.route('/remote/authors',methods=["GET"])
 def getGlobalAuthorsFromRemoteServer():
  
-    url = "http://cs410-06/global/authors"
+    url = "http://cs410-08:8080/global/authors"
+    host = url.split('/')[2]
     response = requests.get(url)
-    sid = serverController.getSidByUrl(url)
+    sid = serverController.getSidByUrl(host)
     if(sid == None):
-        serverController.addServer(url,url,0)
-        sid = serverController.getSidByUrl(url)
+        serverController.addServer(host,host,0)
+        sid = serverController.getSidByUrl(host)
     result = serviceController.getGlobalAuthorsFromRemoteServer(response.content,sid)
     return make_response("", 200)
 
 def getPublicPostsFromRemoteServer():
-    url = "http://cs410-06/posts"
+    url = "http://cs410-08:8080/service/posts"
     response = requests.get(url)
     result = serviceController.getPublicPostsFromRemoteServer(response.content)
     return result

@@ -385,7 +385,7 @@ class AuthorHelper:
         cur = self.dbAdapter.getcursor()
 
         query = ("INSERT INTO author(aid,name,nick_name,pwd,sid,valid) "
-                 "VALUES('%s','%s','%s','%s','%s',1)")%(aid,aid,aid,"",sid)
+                 "VALUES('%s','%s','%s','%s','%s',1)")%(aid,aid,displayName,"",sid)
         try:
           cur.execute(query)
 
